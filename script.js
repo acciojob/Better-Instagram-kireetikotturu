@@ -1,27 +1,27 @@
-let draggedElement = null;
+let dragged = null;
 
-const items = document.querySelectorAll(".image");
-
-items.forEach((item) => {
+document.querySelectorAll(".image").forEach((item) => {
 
   item.addEventListener("dragstart", function () {
-    draggedElement = this;
+    dragged = this;
   });
 
   item.addEventListener("dragover", function (e) {
-    e.preventDefault();
+    e.preventDefault(); // REQUIRED
   });
 
   item.addEventListener("drop", function (e) {
     e.preventDefault();
 
-    if (draggedElement !== this) {
-      const draggedBg = draggedElement.style.backgroundImage;
-      const targetBg = this.style.backgroundImage;
+    if (dragged === this) return;
 
-      draggedElement.style.backgroundImage = targetBg;
-      this.style.backgroundImage = draggedBg;
-    }
+    // READ from computed style
+    const draggedBg = window.getComputedStyle(dragged).backgroundImage;
+    const targetBg = window.getComputedStyle(this).backgroundImage;
+
+    // WRITE as inline style
+    dragged.style.backgroundImage = targetBg;
+    this.style.backgroundImage = draggedBg;
   });
 
 });
